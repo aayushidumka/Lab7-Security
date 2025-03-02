@@ -4,9 +4,38 @@ import Section from "../components/Section";
 import "../App.css";
 
 // mui imports
-import { Button, TextField, Box, Container, Stack } from "@mui/material";
+import { Button, TextField, Box, Container, Stack, Typography } from "@mui/material";
+ 
+//auth import -- protect the employee-mgmt page with a required login
+import { useAuthContext } from "@asgardeo/auth-react";
 
 const EmployeeMgmt = () => {
+
+  // logged in state
+  const { state, signIn } = useAuthContext();
+  
+
+  // If user is not authenticated, show a login message and button
+  if (!state?.isAuthenticated) {
+    return (
+      <Section>
+        <Container sx={{ textAlign: "center", mt: 5 }}>
+          <Typography variant="body1" sx={{ mt: 2 }}>
+            You must sign in to view this page.
+          </Typography>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={() => signIn()} 
+            sx={{ mt: 3 }}
+          >
+            Sign In
+          </Button>
+        </Container>
+      </Section>
+    );
+  }
+
   const [employees, setEmployees] = useState([]);
   const [newEmployee, setNewEmployee] = useState({
     first_name: "",
